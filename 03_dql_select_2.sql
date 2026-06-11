@@ -28,28 +28,28 @@
 
 # tbl_menu, tbl_category 두 테이블을 inner join
 # 조인 조건 : category_code 값이 같은 행 끼리 join
-select
-    *
-from
-    tbl_menu a # 별칭을 a로 지정
-inner join # inner는 생략 가능 == inner가 기본값
-    tbl_category b # 별칭을 b로 지정
-on
-    a.category_code = b.category_code;
-
-# 메뉴명, 가격, 카테고리명 가격 내림차순 조회
-select
-    b.menu_name,
-    b.menu_price,
-    a.category_name
-from
-    tbl_category a
-join
-    tbl_menu b
-on
-    a.category_code = b.category_code
-order by
-    b.menu_price desc;
+# select
+#     *
+# from
+#     tbl_menu a # 별칭을 a로 지정
+# inner join # inner는 생략 가능 == inner가 기본값
+#     tbl_category b # 별칭을 b로 지정
+# on
+#     a.category_code = b.category_code;
+#
+# # 메뉴명, 가격, 카테고리명 가격 내림차순 조회
+# select
+#     b.menu_name,
+#     b.menu_price,
+#     a.category_name
+# from
+#     tbl_category a
+# join
+#     tbl_menu b
+# on
+#     a.category_code = b.category_code
+# order by
+#     b.menu_price desc;
 
 # ================================================
 # outer join
@@ -117,6 +117,82 @@ order by
     a.EMP_ID asc;
 
 
-# cross join
+### menudb 계정
+# cross join(카테시안곱, 곱집합)
+# 조인 되는 두 테이블의 모든 경우수를 처리한것
+select count(*) from tbl_menu; # 24행(초콜릿을 3번 누름)
+select count(*) from tbl_category; # 12행
 
-# multiple join
+# 22 * 12 = 264
+
+select
+    *
+from
+    tbl_menu
+cross join
+    tbl_category;
+
+# self join
+# - 하나의 테이블에서
+#   한 행이 다른 행을 참조하는 관계가 있는 경우
+#   같은 테이블 끼리 조인하는 것
+# [tip] 똑같은 테이블이 2개 있다고 생각하면 쉬움
+select *from tbl_category;
+
+select
+    child.category_code,
+    child.category_name,
+    parent.category_name as "상위카테고리"
+from
+    tbl_category child
+join
+    tbl_category parent
+on
+    child.ref_category_code = parent.category_code
+where
+    parent.category_name = '식사';
+
+# multiple join(다중 조인)
+# - 3개 이상의 테이블을 조인하는 것
+# - join의 순서가 매우 중요함
+# ex) a join b join c
+#  -> (a+b) join c
+#  -> (a+b+c)
+
+select * from tbl_order;
+select * from tbl_order_menu;
+select * from tbl_menu;
+
+select
+    *
+from
+    tbl_order o
+join
+    tbl_order_menu om
+on
+    o.order_code = om.order_code # o, om 합쳐진 reation 생성
+join
+    tbl_menu m
+on
+    m.menu_name = om.menu_code;
+
+# employeedb로 변경
+select * from EMPLOYEE;
+select * from DEPARTMENT;
+select * from LOCATION;
+
+select
+    *
+from
+    EMPLOYEE e
+join
+    DEPARTMENT d
+on
+    e.DEPT_CODE = d.DEPT_ID
+join
+    LOCATION l
+on
+    d.LOCATION_ID = l.LOCAL_CODE;
+
+
+
