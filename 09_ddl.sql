@@ -371,7 +371,7 @@ change name product_name varchar(100) not null;
 
 desc product;
 
-# ==============================================
+# ================================================
 ### DROP : 버림
 DROP TABLE IF EXISTS product;
 
