@@ -76,5 +76,3 @@ ALTER TABLE `price` ADD CONSTRAINT `FK_ROUTE_TO_price_1` FOREIGN KEY (
 REFERENCES `ROUTE` (
 	`route_id`
 );
-
-

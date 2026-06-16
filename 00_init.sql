@@ -1,4 +1,7 @@
 create user skn_ai@'%' identified by '1234'; # 계정 생성
+alter user skn_ai@'%' identified by '1234'; # 계정 생성
+
+
 
 # MySQL에서는 databased와 schema로 같은 의미로 사용
 # - datanase(데이터베이스) == 데이터 창고
