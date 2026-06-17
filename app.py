@@ -4,7 +4,7 @@ from streamlit_folium import st_folium
 
 
 st.set_page_config(
-    page_title="Bus System",
+    page_title="서울시 버스 노선 & 정류장 조회 ",
     page_icon="🚌",
     layout="wide",
     initial_sidebar_state="expanded"
