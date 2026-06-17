@@ -4,7 +4,7 @@ import pymysql
 # ============================================
 # 1. JSON 파일 로드
 # ============================================
-with open('./bus_satation.json', 'r', encoding='utf-8') as f:
+with open('./bus_station.json', 'r', encoding='utf-8') as f:
     data = json.load(f)
 
 # ============================================
@@ -14,7 +14,7 @@ conn = pymysql.connect(
     host='localhost',
     user='skn_ai',
     password='1234',
-    db='seoul_station',
+    db='team6db',
     charset='utf8mb4'
 )
 cursor = conn.cursor()
@@ -23,7 +23,7 @@ cursor = conn.cursor()
 # 3. ROUTE 테이블 INSERT
 # ============================================
 station_sql = """
-    INSERT INTO STATION (station_id, station_nm, gps_x, gps_y, sttnNo, sttnUseAt)
+    INSERT INTO STATION (station_id, station_nm, gps_x, gps_y, sttn_no, sttn_use_at)
     VALUES (%s, %s, %s, %s, %s, %s)
 """
 
