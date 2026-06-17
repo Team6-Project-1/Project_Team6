@@ -182,6 +182,33 @@ bus_data = {
                 "종점 여부": "Y"
             }
         ]
+    },
+    "테스트00": {
+        "route": {
+            "노선 ID": 999999999,
+            "노선 이름": "테스트00",
+            "노선 약칭": "테스트00",
+            "노선 설명": "-",
+            "운행 거리(km)": 0.0,
+            "노선 유형": "마을버스",
+            "지역 ID": "000"
+        },
+        "operation": {
+            "사용 여부": "사용",
+            "운행 여부": "미운행",
+            "평균 배차 간격(분)": 0,
+            "최소 배차 간격(분)": 0,
+            "최대 배차 간격(분)": 0,
+            "운행 소요 시간(분)": 0,
+            "첫차 시간": "-",
+            "막차 시간": "-",
+            "첫차 시간(토요일)": "-",
+            "막차 시간(토요일)": "-",
+            "첫차 시간(공휴일)": "-",
+            "막차 시간(공휴일)": "-"
+        },
+        "price": [],
+        "route_station": []
     }
 }
 
@@ -335,6 +362,9 @@ class BusPage:
         if "selected_bus" not in st.session_state:
             st.session_state.selected_bus = None
 
+        if "bus_operation_message" not in st.session_state:
+            st.session_state.bus_operation_message = ""
+
     def render(self):
         self.init_state()
 
@@ -356,15 +386,29 @@ class BusPage:
             if bus_number in self.bus_data:
                 st.session_state.selected_bus = bus_number
                 st.session_state.bus_search_message = f"{bus_number}번 버스를 찾았습니다."
+
+                operation_status = self.bus_data[bus_number]["operation"]["운행 여부"]
+
+                if operation_status == "운행":
+                    st.session_state.bus_operation_message = f"운행 여부: {operation_status}"
+                else:
+                    st.session_state.bus_operation_message = "운행하지 않는 버스입니다."
             else:
                 st.session_state.selected_bus = None
                 st.session_state.bus_search_message = "없는 버스 번호입니다."
+                st.session_state.bus_operation_message = ""
 
         if st.session_state.bus_search_message:
             if st.session_state.selected_bus:
                 st.success(st.session_state.bus_search_message)
             else:
                 st.error(st.session_state.bus_search_message)
+
+        if st.session_state.bus_operation_message:
+            if st.session_state.bus_operation_message == "운행하지 않는 버스입니다.":
+                st.warning(st.session_state.bus_operation_message)
+            else:
+                st.info(st.session_state.bus_operation_message)
 
         if st.session_state.selected_bus:
             selected_data = self.bus_data[st.session_state.selected_bus]
@@ -384,18 +428,24 @@ class BusPage:
             )
 
             st.markdown("### 요금 정보")
-            st.dataframe(
-                pd.DataFrame(selected_data["price"]),
-                use_container_width=True,
-                hide_index=True
-            )
+            if selected_data["price"]:
+                st.dataframe(
+                    pd.DataFrame(selected_data["price"]),
+                    use_container_width=True,
+                    hide_index=True
+                )
+            else:
+                st.write("요금 정보가 없습니다.")
 
             st.markdown("### 경로 정류장 정보")
-            st.dataframe(
-                pd.DataFrame(selected_data["route_station"]),
-                use_container_width=True,
-                hide_index=True
-            )
+            if selected_data["route_station"]:
+                st.dataframe(
+                    pd.DataFrame(selected_data["route_station"]),
+                    use_container_width=True,
+                    hide_index=True
+                )
+            else:
+                st.write("경로 정류장 정보가 없습니다.")
 
 
 class StationPage:
@@ -464,6 +514,10 @@ page.render()
 
 # sidebar = Sidebar()
 # current_page = sidebar.render()
+
+# 서대문12 → 운행 여부: 운행
+# 강남01 → 운행 여부: 운행
+# 테스트00 → 운행하지 않는 버스입니다.
 
 # pages = {
 #     "map": MapPage(stations),
