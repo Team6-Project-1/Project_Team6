@@ -5,7 +5,7 @@ from streamlit_folium import st_folium
 
 
 st.set_page_config(
-    page_title="Bus System",
+    page_title="BUSKING",
     page_icon="🚌",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -262,7 +262,7 @@ class MapPage:
 
     def init_state(self):
         if "search_mode" not in st.session_state:
-            st.session_state.search_mode = False
+            st.session_state.search_mode = True
 
         if "selected_station" not in st.session_state:
             st.session_state.selected_station = None
@@ -270,43 +270,46 @@ class MapPage:
         if "search_message" not in st.session_state:
             st.session_state.search_message = ""
 
+        if "station_search_input" not in st.session_state:
+            st.session_state.station_search_input = ""
+
+    def search_station(self):
+        station_name = st.session_state.station_search_input.strip()
+
+        if station_name in self.stations:
+            st.session_state.selected_station = station_name
+            st.session_state.search_message = f"{station_name} 정류장을 찾았습니다."
+        else:
+            st.session_state.selected_station = None
+            st.session_state.search_message = "없는 정류장입니다. 다시 입력해주세요"
+
     def render_search_area(self):
         self.init_state()
 
-        if not st.session_state.search_mode:
-            if st.button("검색"):
-                st.session_state.search_mode = True
-                st.session_state.search_message = ""
-                st.rerun()
-        else:
-            col1, col2, col3 = st.columns([5, 1, 1])
+        col1, col2, col3 = st.columns([5, 1, 1])
 
-            with col1:
-                station_name = st.text_input(
-                    "정류장 이름",
-                    placeholder="정확한 정류장 이름을 입력하세요",
-                    label_visibility="collapsed"
-                )
+        with col1:
+            st.text_input(
+                "정류장 이름",
+                placeholder="정류장의 이름을 입력하세요",
+                label_visibility="collapsed",
+                key="station_search_input",
+                on_change=self.search_station
+            )
 
-            with col2:
-                search_clicked = st.button("조회", use_container_width=True)
+        with col2:
+            search_clicked = st.button("조회", use_container_width=True)
 
-            with col3:
-                cancel_clicked = st.button("취소", use_container_width=True)
+        with col3:
+            cancel_clicked = st.button("취소", use_container_width=True)
 
-            if search_clicked:
-                if station_name in self.stations:
-                    st.session_state.selected_station = station_name
-                    st.session_state.search_message = f"{station_name} 정류장을 찾았습니다."
-                else:
-                    st.session_state.selected_station = None
-                    st.session_state.search_message = "없는 정류장입니다."
+        if search_clicked:
+            self.search_station()
 
-            if cancel_clicked:
-                st.session_state.search_mode = False
-                st.session_state.selected_station = None
-                st.session_state.search_message = ""
-                st.rerun()
+        if cancel_clicked:
+            st.session_state.selected_station = None
+            st.session_state.search_message = ""
+            st.rerun()
 
         if st.session_state.search_message:
             if st.session_state.selected_station:
@@ -315,32 +318,35 @@ class MapPage:
                 st.error(st.session_state.search_message)
 
     def render(self):
+        st.title("서울시 버스 노선 및 정류장 조회 시스템")
+
         self.render_search_area()
 
-        route = [
-            [37.4979, 127.0276],
-            [37.5007, 127.0365],
-            [37.5045, 127.0490]
-        ]
+        default_center = [37.5665, 126.9780]
+        default_zoom = 10
 
         if st.session_state.get("selected_station"):
             map_center = self.stations[st.session_state.selected_station]
             zoom_level = 16
         else:
-            map_center = route[0]
-            zoom_level = 14
+            map_center = default_center
+            zoom_level = default_zoom
 
         m = folium.Map(
             location=map_center,
             zoom_start=zoom_level,
-            control_scale=True
+            control_scale=True,
+            scrollWheelZoom=True
         )
 
-        for station_nm, point in self.stations.items():
+        if st.session_state.get("selected_station"):
+            selected_station = st.session_state.selected_station
+            selected_point = self.stations[selected_station]
+
             folium.Marker(
-                location=point,
-                popup=station_nm,
-                tooltip=station_nm
+                location=selected_point,
+                popup=selected_station,
+                tooltip=selected_station
             ).add_to(m)
 
         st_folium(
@@ -461,20 +467,132 @@ class RoutePage:
 
 
 class FAQPage:
+    def __init__(self):
+        self.faq_list = [
+            {
+                "category": "검색",
+                "question": "노선 검색은 어떻게 하나요?",
+                "answer": "버스 번호 또는 노선명을 입력하면 해당 노선 정보를 조회할 수 있습니다."
+            },
+            {
+                "category": "검색",
+                "question": "정류장 검색은 어떻게 하나요?",
+                "answer": "정류장명을 정확히 입력하면 해당 정류장을 조회할 수 있습니다."
+            },
+            {
+                "category": "검색",
+                "question": "검색한 정류장이 없으면 어떻게 되나요?",
+                "answer": "입력한 정류장명이 정확히 일치하지 않으면 '없는 정류장입니다.'라고 표시됩니다."
+            },
+            {
+                "category": "검색",
+                "question": "버스 번호를 일부만 입력해도 검색되나요?",
+                "answer": "현재는 정확한 버스 번호를 입력해야 조회됩니다. 예를 들어 '서대문12'를 정확히 입력해야 합니다."
+            },
+            {
+                "category": "노선",
+                "question": "노선 정보에는 어떤 내용이 포함되나요?",
+                "answer": "노선 ID, 노선 이름, 노선 약칭, 노선 설명, 운행 거리, 노선 유형, 지역 정보가 포함됩니다."
+            },
+            {
+                "category": "노선",
+                "question": "운행하지 않는 버스도 조회되나요?",
+                "answer": "조회는 가능하지만 운행 여부가 미운행이면 '운행하지 않는 버스입니다.'라고 안내합니다."
+            },
+            {
+                "category": "운행",
+                "question": "운행 및 배차 정보에는 어떤 내용이 포함되나요?",
+                "answer": "사용 여부, 운행 여부, 평균 배차 간격, 최소 배차 간격, 최대 배차 간격, 운행 소요 시간, 첫차 및 막차 시간이 포함됩니다."
+            },
+            {
+                "category": "운행",
+                "question": "첫차와 막차 시간은 어디 기준인가요?",
+                "answer": "API 또는 수집 데이터에서 제공하는 노선별 운행 정보를 기준으로 표시됩니다."
+            },
+            {
+                "category": "운행",
+                "question": "배차 간격은 실시간 정보인가요?",
+                "answer": "현재 배차 간격은 수집된 정적 데이터 기준이며, 실시간 도착 정보와는 다를 수 있습니다."
+            },
+            {
+                "category": "정류장",
+                "question": "정류장 정보에는 어떤 내용이 포함되나요?",
+                "answer": "정류장 ID, 정류장명, 정류장 번호, 좌표, 이용 여부 등의 정보가 포함됩니다."
+            },
+            {
+                "category": "정류장",
+                "question": "정류장 위치는 어떻게 표시되나요?",
+                "answer": "정류장의 위도와 경도 좌표를 활용해 지도 위에 마커로 표시됩니다."
+            },
+            {
+                "category": "지도",
+                "question": "지도에서는 무엇을 볼 수 있나요?",
+                "answer": "정류장의 위치를 지도에서 확인할 수 있습니다."
+            },
+            {
+                "category": "지도",
+                "question": "검색한 정류장은 지도에서 어떻게 표시되나요?",
+                "answer": "검색에 성공하면 해당 정류장 위치를 중심으로 지도가 이동합니다."
+            },
+            {
+                "category": "요금",
+                "question": "요금 정보는 어떻게 확인하나요?",
+                "answer": "버스 조회 결과에서 성인, 청소년, 어린이 등 연령대별 요금을 확인할 수 있습니다."
+            },
+            {
+                "category": "요금",
+                "question": "요금은 어떤 기준으로 나뉘나요?",
+                "answer": "노선 유형과 연령대 기준으로 요금이 구분됩니다."
+            },
+            {
+                "category": "데이터",
+                "question": "데이터는 어디에서 가져오나요?",
+                "answer": "공공데이터포털, 서울시 열린데이터광장, 서울시 교통빅데이터플랫폼의 버스 관련 데이터를 활용합니다."
+            },
+            {
+                "category": "데이터",
+                "question": "데이터가 실제와 다를 수 있나요?",
+                "answer": "공공 API 또는 수집 데이터 기준이므로 실제 운행 상황, 임시 우회, 공사, 사고 등에 따라 차이가 있을 수 있습니다."
+            },
+            {
+                "category": "데이터",
+                "question": "API가 동작하지 않으면 어떻게 하나요?",
+                "answer": "API 사용이 어려운 경우 엑셀 또는 CSV 파일 데이터를 활용해 DB에 적재할 수 있습니다."
+            },
+            {
+                "category": "기능",
+                "question": "FAQ도 검색할 수 있나요?",
+                "answer": "FAQ 페이지의 검색창에 키워드를 입력하면 관련 질문과 답변만 필터링해서 볼 수 있습니다."
+            }
+        ]
+
     def render(self):
         st.subheader("FAQ")
 
-        with st.expander("노선 검색은 어떻게 하나요?"):
-            st.write("버스 번호 또는 노선명을 입력하면 해당 노선 정보를 조회할 수 있습니다.")
+        keyword = st.text_input(
+            "FAQ 검색",
+            placeholder="검색어를 입력하세요. 예: 요금, 정류장, 배차, API"
+        )
 
-        with st.expander("정류장 검색은 어떻게 하나요?"):
-            st.write("정류장명을 정확히 입력하면 해당 정류장을 조회할 수 있습니다.")
+        if keyword:
+            filtered_faq = [
+                faq for faq in self.faq_list
+                if keyword.lower() in faq["question"].lower()
+                or keyword.lower() in faq["answer"].lower()
+                or keyword.lower() in faq["category"].lower()
+            ]
+        else:
+            filtered_faq = self.faq_list
 
-        with st.expander("검색한 정류장이 없으면 어떻게 되나요?"):
-            st.write("입력한 정류장명이 정확히 일치하지 않으면 '없는 정류장입니다.'라고 표시됩니다.")
+        if not filtered_faq:
+            st.warning("검색 결과가 없습니다.")
+            return
 
-        with st.expander("지도에서는 무엇을 볼 수 있나요?"):
-            st.write("정류장의 위치를 지도에서 확인할 수 있습니다.")
+        st.caption(f"총 {len(filtered_faq)}개의 FAQ가 있습니다.")
+
+        for faq in filtered_faq:
+            with st.expander(f"[{faq['category']}] {faq['question']}"):
+                st.write(faq["answer"])
 
 
 sidebar = Sidebar()
