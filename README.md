@@ -55,7 +55,50 @@
 ### 5) 노션 상세정보 조회
 - 버스 번호를 입력하면 첫차/막차 시간, 배차 간격, 노선 정보, 요금을 표시한다.
    
-## 6. 실행 방법 [추후 추가]
+## 6. 실행 방법
+api_run.py 실행
+정류장 정보 및 노선 정보를 수집하여 데이터베이스에 저장
+
+---
+
+JSON 데이터 생성
+JSON 생성 파일
+create_station_api_json.py : 정류장 정보를 JSON 파일로 변환 및 저장
+create_route_api_json.py : 노선 정보를 JSON 파일로 변환 및 저장
+
+실행 방법
+api_json_run.py 실행
+데이터베이스 또는 API 데이터를 JSON 파일로 생성 및 저장
+
+---
+
+실행 순서
+DB 초기화
+
+   
+_01_project_init.sql
+_02_table_create.sql
+_03_insert_table.sql
+
+필요 파이썬 모듈 설치
+
+pip install -r requirements.txt
+
+
+API 데이터 적재
+
+   
+api_run.py
+
+JSON 파일 생성
+
+   
+api_json_run.py
+
+서비스 실행
+
+   
+run.py
 
 ## 7. 수행 화면 캡처 [추후 추가]
 
