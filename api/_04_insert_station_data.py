@@ -19,6 +19,7 @@ conn = pymysql.connect(
     db='team6db',
     charset='utf8mb4'
 )
+
 cursor = conn.cursor()
 
 # ============================================
