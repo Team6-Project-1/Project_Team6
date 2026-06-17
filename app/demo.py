@@ -371,6 +371,27 @@ class BusPage:
         if "bus_operation_message" not in st.session_state:
             st.session_state.bus_operation_message = ""
 
+        if "bus_search_input" not in st.session_state:
+            st.session_state.bus_search_input = ""
+
+    def search_bus(self):
+        bus_number = st.session_state.bus_search_input.strip()
+
+        if bus_number in self.bus_data:
+            st.session_state.selected_bus = bus_number
+            st.session_state.bus_search_message = f"{bus_number}번 버스를 찾았습니다."
+
+            operation_status = self.bus_data[bus_number]["operation"]["운행 여부"]
+
+            if operation_status == "운행":
+                st.session_state.bus_operation_message = f"운행 여부: {operation_status}"
+            else:
+                st.session_state.bus_operation_message = "운행하지 않는 버스입니다."
+        else:
+            st.session_state.selected_bus = None
+            st.session_state.bus_search_message = "없는 버스 번호입니다."
+            st.session_state.bus_operation_message = ""
+
     def render(self):
         self.init_state()
 
@@ -379,30 +400,19 @@ class BusPage:
         col1, col2 = st.columns([5, 1])
 
         with col1:
-            bus_number = st.text_input(
+            st.text_input(
                 "버스 번호",
                 placeholder="정확한 버스 번호를 입력하세요. 예: 서대문12",
-                label_visibility="collapsed"
+                label_visibility="collapsed",
+                key="bus_search_input",
+                on_change=self.search_bus
             )
 
         with col2:
             search_clicked = st.button("조회", use_container_width=True)
 
         if search_clicked:
-            if bus_number in self.bus_data:
-                st.session_state.selected_bus = bus_number
-                st.session_state.bus_search_message = f"{bus_number}번 버스를 찾았습니다."
-
-                operation_status = self.bus_data[bus_number]["operation"]["운행 여부"]
-
-                if operation_status == "운행":
-                    st.session_state.bus_operation_message = f"운행 여부: {operation_status}"
-                else:
-                    st.session_state.bus_operation_message = "운행하지 않는 버스입니다."
-            else:
-                st.session_state.selected_bus = None
-                st.session_state.bus_search_message = "없는 버스 번호입니다."
-                st.session_state.bus_operation_message = ""
+            self.search_bus()
 
         if st.session_state.bus_search_message:
             if st.session_state.selected_bus:
