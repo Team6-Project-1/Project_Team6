@@ -1,10 +1,13 @@
 """
 route_station_data.csv → MySQL ROUTE_STATION 테이블 INSERT 스크립트
 """
-
+import importlib
+import sys
+csv = importlib.import_module('csv')
 import csv
 import os
 import mysql.connector
+
 
 # ── DB 연결 설정 ───────────────────────────────────────────
 DB_CONFIG = {
