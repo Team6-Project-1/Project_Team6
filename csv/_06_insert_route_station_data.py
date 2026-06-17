@@ -3,6 +3,7 @@ route_station_data.csv → MySQL ROUTE_STATION 테이블 INSERT 스크립트
 """
 import importlib
 import sys
+sys.path = [p for p in sys.path if p not in ('', '.')]
 csv = importlib.import_module('csv')
 import csv
 import os
