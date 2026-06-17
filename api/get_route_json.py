@@ -2,9 +2,6 @@ import requests
 import json
 import time
 
-url = "http://t-data.seoul.go.kr/apig/apiman-gateway/tapi/BisTbisMsRoute/1.0"
-API_KEY = 'd8e0af2f-6a2f-49bd-9883-d3b6ee52eb4a'
-
 all_data = []
 start_row = 1
 row_cnt = 1000
