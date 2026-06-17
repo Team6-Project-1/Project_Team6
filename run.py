@@ -1,9 +1,9 @@
 # 실행 파일
 # 실행 명령어 : streamlit run app.py
 
-import streamlit as st
+import app as st
 from openpyxl.chart import layout
-from streamlit import navigation
+from app import navigation
 
 from ui.api_page import render_api_page
 from ui.db_page import render_db_page
