@@ -2,23 +2,35 @@
 -- DROP (FK 의존성 역순)
 -- price, ROUTE_OPERATION, ROUTE_STATION → ROUTE → ROUTE_TY, STATION, AREA
 -- ============================================================
+
 DROP TABLE IF EXISTS `price`;
+DROP TABLE IF EXISTS `AGE`;
 DROP TABLE IF EXISTS `ROUTE_OPERATION`;
 DROP TABLE IF EXISTS `ROUTE_STATION`;
 DROP TABLE IF EXISTS `ROUTE`;
 DROP TABLE IF EXISTS `ROUTE_TY`;
 DROP TABLE IF EXISTS `STATION`;
 DROP TABLE IF EXISTS `AREA`;
-
+DROP TABLE IF EXISTS `AREA_NAME`;
 
 -- ============================================================
 -- CREATE (FK 의존성 순서)
 -- ============================================================
 
 -- 1. 독립 테이블 (참조 없음)
+CREATE TABLE `AGE` (
+    `age_code` INT NOT NULL COMMENT '연령코드 (1: 일반, 2: 청소년, 3: 어린이)',
+    `age` VARCHAR(10) NOT NULL COMMENT '연령대'
+);
+
+CREATE TABLE `AREA_NAME` (
+    `area_code` INT NOT NULL COMMENT '지역코드',
+    `area_name` VARCHAR(10) NOT NULL COMMENT '지역명'
+);
+
 CREATE TABLE `AREA` (
     `area_id`   VARCHAR(10)  NOT NULL COMMENT '지역 구분 ID',
-    `area_name` VARCHAR(20)  NOT NULL COMMENT '지역명'
+    `area_code` INT  NOT NULL COMMENT '지역 코드'
 );
 
 CREATE TABLE `ROUTE_TY` (
@@ -77,7 +89,7 @@ CREATE TABLE `ROUTE_OPERATION` (
 
 -- 5. ROUTE_TY 참조
 CREATE TABLE `price` (
-    `age`      VARCHAR(10) NOT NULL COMMENT '연령대: 성인, 청소년, 어린이',
+    `age_code`      INT NOT NULL COMMENT '연령코드(1: 일반, 2: 청소년, 3: 어린이)',
     `route_ty` VARCHAR(10) NOT NULL COMMENT '1:공항2:마을3:간선4:지선5:순환6:광역7:인천8:경기10:관광',
     `price`    INT         NOT NULL COMMENT '요금'
 );
@@ -92,8 +104,9 @@ ALTER TABLE `STATION`         ADD CONSTRAINT `PK_STATION`         PRIMARY KEY (`
 ALTER TABLE `ROUTE`           ADD CONSTRAINT `PK_ROUTE`           PRIMARY KEY (`route_id`);
 ALTER TABLE `ROUTE_STATION`   ADD CONSTRAINT `PK_ROUTE_STATION`   PRIMARY KEY (`route_station_id`);
 ALTER TABLE `ROUTE_OPERATION` ADD CONSTRAINT `PK_ROUTE_OPERATION` PRIMARY KEY (`operation_id`, `route_id`);
-ALTER TABLE `price`           ADD CONSTRAINT `PK_PRICE`           PRIMARY KEY (`age`, `route_ty`);
-
+ALTER TABLE `price`           ADD CONSTRAINT `PK_PRICE`           PRIMARY KEY (`age_code`, `route_ty`);
+ALTER TABLE `AREA_NAME`       ADD CONSTRAINT `PK_AREA_NAME`       PRIMARY KEY (`area_code`);
+ALTER TABLE `AGE`             ADD CONSTRAINT `PK_AGE`             PRIMARY KEY (`age_code`);
 
 -- ============================================================
 -- FOREIGN KEY
@@ -122,3 +135,11 @@ ALTER TABLE `ROUTE_OPERATION` ADD CONSTRAINT `FK_ROUTE_TO_ROUTE_OPERATION_1`
 -- price → ROUTE_TY (기존)
 ALTER TABLE `price` ADD CONSTRAINT `FK_ROUTE_TY_TO_price_1`
     FOREIGN KEY (`route_ty`) REFERENCES `ROUTE_TY` (`route_ty`);
+
+-- price → AGE (기존)
+ALTER TABLE `price` ADD CONSTRAINT `FK_AGE_TO_price_1`
+    FOREIGN KEY (`age_code`) REFERENCES `AGE`(`age_code`);
+
+-- AREA → AREA_NAME (기존)
+ALTER TABLE `AREA` ADD CONSTRAINT `FK_AREA_NAME_TO_AREA_1`
+    FOREIGN KEY (`area_code`) REFERENCES `AREA_NAME`(`area_code`);
