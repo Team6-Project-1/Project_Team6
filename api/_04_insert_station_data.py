@@ -2,6 +2,8 @@
 
 import json
 import pymysql
+from config.settings import DB_CONFIG
+
 
 # ============================================
 # 1. JSON 파일 로드
@@ -12,13 +14,7 @@ with open('./bus_station.json', 'r', encoding='utf-8') as f:
 # ============================================
 # 2. DB 연결
 # ============================================
-conn = pymysql.connect(
-    host='localhost',
-    user='skn_ai',
-    password='1234',
-    db='team6db',
-    charset='utf8mb4'
-)
+conn = pymysql.connect(**DB_CONFIG)
 
 cursor = conn.cursor()
 

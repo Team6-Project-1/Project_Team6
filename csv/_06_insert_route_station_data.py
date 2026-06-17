@@ -8,17 +8,9 @@ csv = importlib.import_module('csv')
 import csv
 import os
 import mysql.connector
+from config.settings import DB_CONFIG
 
 
-# ── DB 연결 설정 ───────────────────────────────────────────
-DB_CONFIG = {
-    'host': 'localhost',
-    'port': 3306,
-    'user': 'skn_ai',  # ← 본인 계정으로 수정
-    'password': '1234',  # ← 비밀번호 입력
-    'database': 'team6db',  # ← DB명 입력
-}
-# ───────────────────────────────────────────────────────────
 
 CSV_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'route_station_data.csv')
 
