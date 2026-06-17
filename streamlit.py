@@ -83,3 +83,5 @@ db_page = st.Page(
 
 navigation = st.navigation([api_page, db_page], position="sidebar")
 navigation.run()
+
+# 초기 파일
