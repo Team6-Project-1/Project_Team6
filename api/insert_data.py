@@ -1,3 +1,5 @@
+# [2단계]
+
 import json
 import pymysql
 
