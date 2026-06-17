@@ -20,7 +20,18 @@ conn = pymysql.connect(
 cursor = conn.cursor()
 
 # ============================================
-# 3. ROUTE 테이블 INSERT
+# 3. DB에 존재하는 FK 값 사전 로드 (필터링용)
+# ============================================
+cursor.execute("SELECT area_id FROM AREA")
+valid_area_ids = set(str(r[0]) for r in cursor.fetchall())
+
+cursor.execute("SELECT route_ty FROM ROUTE_TY")
+valid_route_tys = set(str(r[0]) for r in cursor.fetchall())
+
+print(f"유효 area_id: {len(valid_area_ids)}개, 유효 route_ty: {len(valid_route_tys)}개")
+
+# ============================================
+# 4. ROUTE 테이블 INSERT
 # ============================================
 route_sql = """
     INSERT INTO ROUTE (route_id, route_nm, route_abrv, route_dc, dstnc, route_ty, area_id)
@@ -28,25 +39,35 @@ route_sql = """
 """
 
 route_count = 0
+route_skip = 0
+valid_route_ids = set()
+
 for row in data:
-    # area_id는 여전히 INT 컬럼이라 '-' 같은 비숫자 값은 0으로 처리 필요
+    area_id  = str(row.get('areaId', '-'))
+    route_ty = str(row.get('routeTy', ''))
+
+    # FK 검증: area_id, route_ty 모두 DB에 있어야 INSERT
+    if area_id not in valid_area_ids or route_ty not in valid_route_tys:
+        route_skip += 1
+        continue
 
     values = (
-        row['route_id'],
-        row['route_nm'],
-        row['route_abrv'],
-        row['route_dc'],   # VARCHAR(50)로 변경되어 '-' 그대로 삽입 가능
+        row['routeId'],
+        row['routeNm'],
+        row['routeAbrv'],
+        row['routeDc'],
         row['dstnc'],
-        row['route_ty'],
-        row['area_id']
+        route_ty,
+        area_id,
     )
     cursor.execute(route_sql, values)
+    valid_route_ids.add(str(row['routeId']))
     route_count += 1
 
-print(f"ROUTE 테이블 삽입 완료: {route_count}건")
+print(f"ROUTE 테이블 삽입 완료: {route_count}건 (스킵: {route_skip}건)")
 
 # ============================================
-# 4. ROUTE_OPERATION 테이블 INSERT
+# 5. ROUTE_OPERATION 테이블 INSERT (삽입된 route만)
 # ============================================
 operation_sql = """
     INSERT INTO ROUTE_OPERATION (
@@ -59,31 +80,33 @@ operation_sql = """
 
 operation_count = 0
 for row in data:
+    if str(row.get('routeId', '')) not in valid_route_ids:
+        continue
+
     operation_count += 1
-    operation_id = operation_count  # JSON에 없는 값이라 순번으로 직접 생성
 
     values = (
-        operation_id,
-        row['route_id'],
-        row['use_at'],
-        row['oprat_at'],
+        operation_count,
+        row['routeId'],
+        row['useAt'],
+        row['opratAt'],
         row['caralc'],
-        row['mumm_caralc'],
-        row['mxmm_caralc'],
-        row['oprat_reqre_tm'],
-        row['fircar_tm'],
-        row['lstcar_tm'],
-        row['fircar_stm'],
-        row['lstcar_stm'],
-        row['fircar_htm'],
-        row['lstcar_htm'],
+        row['mummCaralc'],
+        row['mxmmCaralc'],
+        row['opratReqreTm'],
+        row['fircarTm'],
+        row['lstcarTm'],
+        row['fircarStm'],
+        row['lstcarStm'],
+        row['fircarHtm'],
+        row['lstcarHtm'],
     )
     cursor.execute(operation_sql, values)
 
 print(f"ROUTE_OPERATION 테이블 삽입 완료: {operation_count}건")
 
 # ============================================
-# 5. 커밋 및 종료
+# 6. 커밋 및 종료
 # ============================================
 conn.commit()
 cursor.close()
