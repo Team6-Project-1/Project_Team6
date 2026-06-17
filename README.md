@@ -27,5 +27,26 @@
         - 특정 지역의 연도별 변화 추이 확인
         
 6. 실행 방법
+
+## 실행 순서
+
+1. DB 초기화
+
+   * `_01_project_init.sql`
+   * `_02_table_create.sql`
+   * `_03_insert_table.sql`
+
+2. API 데이터 적재
+
+   * `api_run.py`
+
+3. JSON 파일 생성
+
+   * `api_json_run.py`
+
+4. 서비스 실행
+
+   * `run.py`
+
 7. 수행 화면 캡처
 8. 회고
