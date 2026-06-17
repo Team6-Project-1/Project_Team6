@@ -1,5 +1,5 @@
 # 실행 파일
-# 실행 명령어 : streamlit run app.py
+# 실행 명령어 : streamlit run demo.py
 
 import app as st
 from openpyxl.chart import layout
