@@ -249,4 +249,4 @@ elif current_page == "faq":
 else:
     render_map_page()
 
-# 초기 파일
+# 초기 파일 
