@@ -72,32 +72,23 @@ api_json_run.py 실행
 
 ---
 
-실행 순서
-DB 초기화
+**실행 순서**
+1. DB 초기화
 
-   
 _01_project_init.sql
 _02_table_create.sql
 _03_insert_table.sql
 
-필요 파이썬 모듈 설치
-
+2. 필요 파이썬 모듈 설치
 pip install -r requirements.txt
 
-
-API 데이터 적재
-
-   
+3. API 데이터 적재
 api_run.py
 
-JSON 파일 생성
-
-   
+4. JSON 파일 생성
 api_json_run.py
 
-서비스 실행
-
-   
+5. 서비스 실행
 run.py
 
 ## 7. 수행 화면 캡처 [추후 추가]
