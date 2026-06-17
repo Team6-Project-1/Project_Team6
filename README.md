@@ -5,12 +5,12 @@
 ## 1. 팀 소개 - 6팀
 * **🧑‍🔬 팀명:** 서울버스 버스터즈 (SeoulBus Busters) 
 * **👥 팀원:** 김나은, 김유진, 박기현, 오호민, 이준희A
-* **🔗 멤버 개인 깃허브 계정 연동**
-	    김나은: naeuneo (nangni30@naver.com) 
-	    김유진: ujinkim2001 (ujinkim@naver.com)
-	    박기현: HYonthePark (rlgusqkr102@gmail.com)
-	    오호민: necknam (gom532454@gmail.com)
-	    이준희A: june229 (mswkdh3790@gmail.com)
+* **🔗 멤버 개인 깃허브 계정 연동**<br>
+	- 김나은: naeuneo (nangni30@naver.com) <br>
+	- 김유진: ujinkim2001 (ujinkim@naver.com)<br>
+	- 박기현: HYonthePark (rlgusqkr102@gmail.com)<br>
+	- 오호민: necknam (gom532454@gmail.com)<br>
+	- 이준희A: june229 (mswkdh3790@gmail.com)
 
 ## 2. 프로젝트 개요
 * **🎡프로젝트 명**
