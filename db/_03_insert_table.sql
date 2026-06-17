@@ -1,4 +1,4 @@
-## 노선 유형 테이블 ROUTE_TY
+## 노선 유형 테이블 ROUTE_TY============================================
 
 INSERT INTO ROUTE_TY VALUES ('1', '공항'),
                        ('2', '마을'),
@@ -11,12 +11,12 @@ INSERT INTO ROUTE_TY VALUES ('1', '공항'),
                        ('10', '관광');
 
 
-## 연령대 테이블 AGE
+## 연령대 테이블 AGE=====================================================
 INSERT INTO AGE VALUES (1, '일반'),
                        (2, '청소년'),
                        (3, '어린이');
 
-## 요금 정보 테이블 price - (1)
+## 요금 정보 테이블 price - (1)==========================================
 ALTER TABLE `price` MODIFY COLUMN `price` VARCHAR(10) NOT NULL COMMENT '요금';
 INSERT INTO price VALUES (1, '1', '거리 비례 요금'),
                          (2, '1', '거리 비례 요금'),
@@ -58,13 +58,13 @@ INSERT INTO price VALUES (1, '8', '1650'),
                          (3, '8', '830');
 
 
-## 요금 정보 테이블 price - (4)
+## 요금 정보 테이블 price - (10)
 INSERT INTO price VALUES (1, '10', '관광지별 상이'),
                          (2, '10', '관광지별 상이'),
                          (3, '10', '관광지별 상이');
 
 
-## area_code -> AUTO INCREMENT 설정
+## area_code -> AUTO INCREMENT 설정=======================================
 -- 1. FK 제거
 ALTER TABLE `AREA` DROP FOREIGN KEY `FK_AREA_NAME_TO_AREA_1`;
 
@@ -75,7 +75,7 @@ ALTER TABLE `AREA_NAME` MODIFY `area_code` INT NOT NULL AUTO_INCREMENT;
 ALTER TABLE `AREA` ADD CONSTRAINT `FK_AREA_NAME_TO_AREA_1`
     FOREIGN KEY (`area_code`) REFERENCES `AREA_NAME`(`area_code`);
 
-## AREA_NAME 테이블 INSERT
+## AREA_NAME 테이블 INSERT===============================================
 INSERT INTO AREA_NAME(area_name) VALUES
 ('서울'),
 ('인천'),
@@ -109,7 +109,7 @@ INSERT INTO AREA_NAME(area_name) VALUES
 ('가평'),
 ('양평');
 
-# AREA 테이블 INSERT
+# AREA 테이블 INSERT=======================================
 INSERT INTO AREA(area_id, area_code) VALUES
 ('-', 1),
 ('3', 1),
