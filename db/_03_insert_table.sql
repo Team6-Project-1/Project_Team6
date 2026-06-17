@@ -173,3 +173,5 @@ INSERT INTO AREA(area_id, area_code) VALUES
 ('238', 29),
 ('239', 30),
 ('240', 31);
+
+SELECT COUNT(*) FROM ROUTE_STATION;
