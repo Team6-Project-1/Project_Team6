@@ -1,4 +1,4 @@
-# 🚌 서울시 버스 노선 및 정류장 조회 시스템
+<img width="1907" height="862" alt="경로조회2" src="https://github.com/user-attachments/assets/fe3a1a15-6c59-40c0-a32f-7b26c9bde1a8" /># 🚌 서울시 버스 노선 및 정류장 조회 시스템
 > 공공데이터를 활용한 서울시 버스 노선 정보 및 정류장 위치 시각화 서비스
 
 ---
@@ -97,7 +97,16 @@ api_json_run.py
 5. 서비스 실행<br>
 run.py
 
-## 7. 수행 화면 캡처 [추후 추가]
+## 7. 수행 화면 캡처
+<img width="1898" height="858" alt="경로조회1" src="https://github.com/user-attachments/assets/a117fa53-ea27-4f88-a559-fa270a71b23d" />
+
+<img width="1907" height="862" alt="경로조회2" src="https://github.com/user-attachments/assets/de7804a2-5aba-4dac-846c-3e5cba638b82" />
+
+<img width="1906" height="865" alt="버스조회" src="https://github.com/user-attachments/assets/faa1a59f-0d55-4eff-ad6f-55278c18df60" />
+
+<img width="1902" height="865" alt="정류장조회" src="https://github.com/user-attachments/assets/b6c34b41-b434-4fcd-ae5b-de7e3ba28174" />
+
+<img width="1902" height="866" alt="지도조회" src="https://github.com/user-attachments/assets/659d8322-098e-4515-9898-342bf9f6cbe1" />
 
 ## 8. 회고
 
