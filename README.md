@@ -40,11 +40,14 @@
 ---
 ## 논리 모델
 <img width="1242" height="792" alt="image" src="https://github.com/user-attachments/assets/51742baa-45f0-43fd-a303-315440a3c24c" />
+
 ---
 
 ### 물리 모델
 <img width="1806" height="766" alt="image" src="https://github.com/user-attachments/assets/82446fba-8f1d-484f-a75d-7803215f6ec8" />
+
 ---
+
 ## 5. 주요 기능
 ### 1) 지도조회 (정류장 검색 및 지도 표시)
 정류장명을 부분 입력하면 일치하는 모든 정류장이 실시간 자동완성 리스트로 표시되고, 선택 시 해당 위치가 지도에 표시된다.
