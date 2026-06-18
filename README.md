@@ -37,7 +37,9 @@
      	   ⓒ 노선별 경유노드 	https://t-data.seoul.go.kr/dataprovide/trafficdataviewfile.do?data_id=58
 
 ## 4. DB 설계(논리/물리 ERD)
+
 ---
+
 ## 논리 모델
 <img width="1242" height="792" alt="image" src="https://github.com/user-attachments/assets/51742baa-45f0-43fd-a303-315440a3c24c" />
 
